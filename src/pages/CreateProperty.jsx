@@ -2,6 +2,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 
+const NEPAL_DISTRICTS = [
+  "Achham", "Arghakhanchi", "Baglung", "Baitadi", "Bajhang", "Bajura", "Banke", "Bara",
+  "Bardiya", "Bhaktapur", "Bhojpur", "Chitwan", "Dadeldhura", "Dailekh", "Dang", "Darchula",
+  "Dhading", "Dhankuta", "Dhanusha", "Dolakha", "Dolpa", "Doti", "Gorkha", "Gulmi", "Humla",
+  "Ilam", "Jajarkot", "Jhapa", "Jumla", "Kailali", "Kalikot", "Kanchanpur", "Kapilvastu",
+  "Kaski", "Kathmandu", "Kavrepalanchok", "Khotang", "Lalitpur", "Lamjung", "Mahottari",
+  "Makwanpur", "Manang", "Morang", "Mugu", "Mustang", "Myagdi", "Nawalpur", "Nuwakot",
+  "Okhaldhunga", "Palpa", "Panchthar", "Parasi", "Parbat", "Parsa", "Pyuthan", "Ramechhap",
+  "Rasuwa", "Rautahat", "Rolpa", "Rukum East", "Rukum West", "Rupandehi", "Salyan",
+  "Sankhuwasabha", "Saptari", "Sarlahi", "Sindhuli", "Sindhupalchok", "Siraha", "Solukhumbu",
+  "Sunsari", "Surkhet", "Syangja", "Tanahun", "Taplejung", "Terhathum", "Udayapur"
+];
+
 function CreateProperty() {
   const [formData, setFormData] = useState({
     title: '',
@@ -33,7 +46,6 @@ function CreateProperty() {
     setUploading(true);
 
     try {
-      // Step 1: create the property
       const payload = {
         ...formData,
         price: parseFloat(formData.price),
@@ -44,7 +56,6 @@ function CreateProperty() {
       const propertyResponse = await api.post('/properties', payload);
       const propertyId = propertyResponse.data.id;
 
-      // Step 2: upload each selected image to that property
       for (const image of images) {
         const imageForm = new FormData();
         imageForm.append('file', image);
@@ -99,23 +110,21 @@ function CreateProperty() {
               required
             />
 
-           <select
-  name="type"
-  value={formData.type}
-  onChange={handleChange}
-  className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white p-2 rounded"
-
-
->
-  <option value="APARTMENT">Apartment</option>
-  <option value="HOUSE">House</option>
-  <option value="LAND">Land</option>
-  <option value="OFFICE">Office</option>
-  <option value="RETAIL">Retail Shop</option>
-  <option value="RESTAURANT">Restaurant</option>
-  <option value="WAREHOUSE">Warehouse</option>
-  <option value="OTHER_COMMERCIAL">Other Commercial</option>
-</select>
+            <select
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white p-2 rounded"
+            >
+              <option value="APARTMENT">Apartment</option>
+              <option value="HOUSE">House</option>
+              <option value="LAND">Land</option>
+              <option value="OFFICE">Office</option>
+              <option value="RETAIL">Retail Shop</option>
+              <option value="RESTAURANT">Restaurant</option>
+              <option value="WAREHOUSE">Warehouse</option>
+              <option value="OTHER_COMMERCIAL">Other Commercial</option>
+            </select>
           </div>
 
           <input
@@ -127,14 +136,18 @@ function CreateProperty() {
             required
           />
 
-          <input
+          <select
             name="city"
-            placeholder="City"
             value={formData.city}
             onChange={handleChange}
-            className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 p-2 rounded"
+            className="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white p-2 rounded"
             required
-          />
+          >
+            <option value="">Select District</option>
+            {NEPAL_DISTRICTS.map((district) => (
+              <option key={district} value={district}>{district}</option>
+            ))}
+          </select>
 
           {(formData.type === 'APARTMENT' || formData.type === 'HOUSE') ? (
             <div className="grid grid-cols-3 gap-4">

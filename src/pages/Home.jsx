@@ -2,6 +2,19 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
 
+const NEPAL_DISTRICTS = [
+  "Achham", "Arghakhanchi", "Baglung", "Baitadi", "Bajhang", "Bajura", "Banke", "Bara",
+  "Bardiya", "Bhaktapur", "Bhojpur", "Chitwan", "Dadeldhura", "Dailekh", "Dang", "Darchula",
+  "Dhading", "Dhankuta", "Dhanusha", "Dolakha", "Dolpa", "Doti", "Gorkha", "Gulmi", "Humla",
+  "Ilam", "Jajarkot", "Jhapa", "Jumla", "Kailali", "Kalikot", "Kanchanpur", "Kapilvastu",
+  "Kaski", "Kathmandu", "Kavrepalanchok", "Khotang", "Lalitpur", "Lamjung", "Mahottari",
+  "Makwanpur", "Manang", "Morang", "Mugu", "Mustang", "Myagdi", "Nawalpur", "Nuwakot",
+  "Okhaldhunga", "Palpa", "Panchthar", "Parasi", "Parbat", "Parsa", "Pyuthan", "Ramechhap",
+  "Rasuwa", "Rautahat", "Rolpa", "Rukum East", "Rukum West", "Rupandehi", "Salyan",
+  "Sankhuwasabha", "Saptari", "Sarlahi", "Sindhuli", "Sindhupalchok", "Siraha", "Solukhumbu",
+  "Sunsari", "Surkhet", "Syangja", "Tanahun", "Taplejung", "Terhathum", "Udayapur"
+];
+
 function Home() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,13 +64,17 @@ function Home() {
       <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Available Properties</h1>
 
       <form onSubmit={handleSearch} className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-md mb-6 grid grid-cols-1 md:grid-cols-5 gap-3">
-        <input
+        <select
           name="city"
-          placeholder="City"
           value={filters.city}
           onChange={handleFilterChange}
-          className="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 p-2 rounded"
-        />
+          className="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white p-2 rounded"
+        >
+          <option value="">Any District</option>
+          {NEPAL_DISTRICTS.map((district) => (
+            <option key={district} value={district}>{district}</option>
+          ))}
+        </select>
 
         <select
           name="type"
